@@ -1,0 +1,17 @@
+language: c
+os: linux
+dist: bionic
+services:
+  - xvfb
+
+env:
+  global:
+    - RACKET_DIR=~/racket
+    - RACKET_VERSION=7.7
+
+install:
+  - bash <(curl https://raw.githubusercontent.com/greghendershott/travis-racket/master/install-racket.sh)
+  - export PATH="${RACKET_DIR}/bin:${PATH}"
+
+script:
+  - xvfb-run --auto-servernum raco test tests.rkt
