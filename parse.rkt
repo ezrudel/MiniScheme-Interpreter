@@ -202,7 +202,27 @@
                     (error 'parse "Invalid syntax ~s" input))]
                [(eq? (first input) 'begin)
                 (begin-exp (map parse (rest input)))]
+               [(eq? (first input) 'letrec)
+                (if (= (length input) 3)
+                    (parse-letrec input)
+                    (error 'parse "Invalid syntax ~s" input))]
                [else (app-exp
                       (parse (first input))
                       (map parse (rest input)))])]
         [else parse-error]))
+
+(define (parse-letrec input)
+  (let* ([syms (map first (second input))]
+         [exps (map second (second input))]
+         [body (third input)]
+         [new-syms (map (λ (s) (gensym)) syms)])
+    (let-exp syms
+             (map (λ (s) (lit-exp 0)) syms)
+             (let-exp new-syms
+                      (map parse exps)
+                      (begin-exp
+                        (append (map
+                                 (λ (s new-s)
+                                   (set-exp s (var-exp new-s)))
+                                 syms new-syms)
+                                (list (parse body))))))))

@@ -15,7 +15,7 @@
            (apply-proc proc args))]
         [(ite-exp? tree)
          (if (or (eq? 'False (eval-exp (ite-exp-if tree) e))
-                 (= 0 (eval-exp (ite-exp-if tree) e)))
+                 (eq? 0 (eval-exp (ite-exp-if tree) e)))
              (eval-exp (ite-exp-else tree) e)
              (eval-exp (ite-exp-then tree) e))]
         [(let-exp? tree)
@@ -121,6 +121,6 @@
        empty-env))
 
 (define init-env
-  (env '(x y z)
-       '(23 42 0)
+  (env '(True False x y z)
+       '(True False 23 42 0)
        prim-env))
