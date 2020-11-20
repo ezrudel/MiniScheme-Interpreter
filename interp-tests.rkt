@@ -75,14 +75,14 @@
                 6)
    (test-equal? "lambda simple"
                 (eval-exp '(app-exp (lam-exp (x) (var-exp x))
-                                    ((lit-exp 1))))
+                                    ((lit-exp 1))) prim-env)
                 1)
    (test-equal? "lambda complex"
                 (eval-exp '(app-exp
                             (lam-exp (x y)
                                      (app-exp (var-exp *)
                                               ((var-exp x) (var-exp y))))
-                            ((lit-exp 2) (lit-exp 4))))
+                            ((lit-exp 2) (lit-exp 4))) prim-env)
                 8)
    (test-equal? "let + lambda"
                 (eval-exp '(let-exp
@@ -90,8 +90,16 @@
                             ((lam-exp (x) (app-exp (var-exp *)
                                                    ((var-exp x)
                                                     (var-exp x)))))
-                            (app-exp (var-exp sqr) ((lit-exp 64)))))
+                            (app-exp (var-exp sqr) ((lit-exp 64))))
+                          prim-env)
                 4096)
+   (test-equal? "begin + set!"
+                (eval-exp '(let-exp (x y) ((lit-exp 1) (lit-exp 2))
+                          (begin-exp
+                            ((set-exp x (lit-exp 23))
+                             (app-exp (var-exp +)
+                                      ((var-exp x) (var-exp y))))))
+                          prim-env)
+                25)
 
-                ))
-  
+   ))

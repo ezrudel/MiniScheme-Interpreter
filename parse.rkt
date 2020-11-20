@@ -129,6 +129,43 @@
       (third exp)
       (error "~s is not a lambda-exp" exp)))
 
+; set-exp data type
+(define (set-exp sym exp)
+  (list 'set-exp sym exp))
+
+(define (set-exp? exp)
+  (if (list? exp)
+      (if (equal? 'set-exp (first exp))
+          #t
+          #f)
+      #f))
+
+(define (set-exp-sym exp)
+  (if (set-exp? exp)
+      (second exp)
+      (error "~s is not a set-exp" exp)))
+
+(define (set-exp-val exp)
+  (if (set-exp? exp)
+      (third exp)
+      (error "~s is not a set-exp" exp)))
+
+; begin-exp data type
+(define (begin-exp exps)
+  (list 'begin-exp exps))
+
+(define (begin-exp? exp)
+  (if (list? exp)
+      (if (equal? 'begin-exp (first exp))
+          #t
+          #f)
+      #f))
+
+(define (begin-exp-list exp)
+  (if (begin-exp exp)
+      (second exp)
+      (error "~s is not a begin-exp" exp)))
+
 
 ; parser
 (define (parse input)
@@ -158,6 +195,13 @@
                     (lambda-exp (second input)
                                 (parse (third input)))
                     (error 'parse "Invalid syntax ~s" input))]
+               [(eq? (first input) 'set!)
+                (if (= (length input) 3)
+                    (set-exp (second input)
+                             (parse (third input)))
+                    (error 'parse "Invalid syntax ~s" input))]
+               [(eq? (first input) 'begin)
+                (begin-exp (map parse (rest input)))]
                [else (app-exp
                       (parse (first input))
                       (map parse (rest input)))])]

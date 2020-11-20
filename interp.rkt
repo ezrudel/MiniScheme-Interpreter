@@ -28,6 +28,13 @@
          (closure (lambda-params tree)
                   (lambda-body tree)
                   e)]
+        [(set-exp? tree)
+         (set-box! (env-lookup e (set-exp-sym tree))
+                   (eval-exp (set-exp-val tree) e))]
+        [(begin-exp? tree)
+         (foldl (λ (exp acc) (eval-exp exp e))
+                (void)
+                (begin-exp-list tree))]
         [else (error 'eval-exp "Invalid tree: ~s" tree)]))
 
 ; closure data type

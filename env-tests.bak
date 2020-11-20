@@ -37,7 +37,7 @@
                 '(x y))
 
    (test-equal? "Values accessor"
-                (map unbox (env-vals test-env))
+                (env-vals test-env)
                 '(1 2))
 
    (test-equal? "Previous environment accessor"

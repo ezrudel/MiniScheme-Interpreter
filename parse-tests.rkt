@@ -63,6 +63,16 @@
                   ((lam-exp (x) (app-exp (var-exp *)
                                          ((var-exp x) (var-exp x)))))
                   (app-exp (var-exp sqr) ((lit-exp 64)))))
+   (test-equal? "begin + set!"
+                (parse '(let ([x 1] [y 2])
+                          (begin (set! x 23)
+                                 (+ x y))))
+                '(let-exp (x y) ((lit-exp 1) (lit-exp 2))
+                          (begin-exp
+                            ((set-exp x (lit-exp 23))
+                             (app-exp (var-exp +)
+                                      ((var-exp x) (var-exp y)))))))
+                
 
                 
    ; couldn't get this test to work for some reason
