@@ -48,27 +48,11 @@
                                    ((var-exp a)
                                     (var-exp b)))))
    (test-equal? "lambda simple"
-                (parse '((lambda (x) x) 1))
-                '(app-exp (lam-exp (x) (var-exp x)) ((lit-exp 1))))
-   (test-equal? "lambda complex"
-                (parse '((lambda (x y) (* x y)) 2 4))
-                '(app-exp
-                  (lam-exp (x y) (app-exp (var-exp *)
-                                          ((var-exp x) (var-exp y))))
-                  ((lit-exp 2) (lit-exp 4))))
-   (test-equal? "let + lambda"
-                (parse '(let ((sqr (lambda (x) (* x x)))) (sqr 64)))
-                '(let-exp
-                  (sqr)
-                  ((lam-exp (x) (app-exp (var-exp *)
-                                         ((var-exp x) (var-exp x)))))
-                  (app-exp (var-exp sqr) ((lit-exp 64)))))
-
-                
-   ; couldn't get this test to work for some reason
-   ; '() throws an error but apparently it's not
-   ; the right kind of error
-   ;(test-exn "empty"
-   ;         exn:fail
-   ;         (λ () (parse '())))
-   ))
+                (parse '
+                ; couldn't get this test to work for some reason
+                ; '() throws an error but apparently it's not the right kind of error
+                ;(test-exn "empty"
+                ;         exn:fail
+                ;         (λ () (parse '())))
+                ))
+  

@@ -6,7 +6,7 @@
 
 (define (eval-exp tree e)
   (cond [(lit-exp? tree) (lit-exp-num tree)]
-        [(var-exp? tree) (env-lookup e (var-exp-sym tree))]
+        [(var-exp? tree) (unbox (env-lookup e (var-exp-sym tree)))]
         [(app-exp? tree)
          (let ([proc (eval-exp (app-exp-proc tree) e)]
                [args (map
@@ -24,11 +24,45 @@
                         (map (λ (exp) (eval-exp exp e))
                              (let-exp-trees tree))
                         e))]
+        [(lambda-exp? tree)
+         (closure (lambda-params tree)
+                  (lambda-body tree)
+                  e)]
         [else (error 'eval-exp "Invalid tree: ~s" tree)]))
+
+; closure data type
+(define (closure param-list body env)
+  (list 'closure param-list body env))
+
+(define (closure? obj)
+  (if (list? obj)
+      (if (eq? 'closure (first obj))
+          #t
+          #f)
+      #f))
+
+(define (closure-params c)
+  (if (closure? c)
+      (second c)
+      (error "~s is not a closure" c)))
+
+(define (closure-body c)
+  (if (closure? c)
+      (third c)
+      (error "~s is not a closure" c)))
+
+(define (closure-env c)
+  (if (closure? c)
+      (fourth c)
+      (error "~s is not a closure" c)))
+
 
 (define (apply-proc proc args)
   (cond [(prim-proc? proc)
          (apply-primitive-op (prim-proc-op proc) args)]
+        [(closure? proc)
+         (eval-exp (closure-body proc)
+                   (env (closure-params proc) args (closure-env proc)))]
         [else (error 'apply-proc "bad procedure: ~s" proc)]))
 
 (define (apply-primitive-op op args)

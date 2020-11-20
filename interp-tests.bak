@@ -74,24 +74,5 @@
                           init-env)
                 6)
    (test-equal? "lambda simple"
-                (eval-exp '(app-exp (lam-exp (x) (var-exp x))
-                                    ((lit-exp 1))))
-                1)
-   (test-equal? "lambda complex"
-                (eval-exp '(app-exp
-                            (lam-exp (x y)
-                                     (app-exp (var-exp *)
-                                              ((var-exp x) (var-exp y))))
-                            ((lit-exp 2) (lit-exp 4))))
-                8)
-   (test-equal? "let + lambda"
-                (eval-exp '(let-exp
-                            (sqr)
-                            ((lam-exp (x) (app-exp (var-exp *)
-                                                   ((var-exp x)
-                                                    (var-exp x)))))
-                            (app-exp (var-exp sqr) ((lit-exp 64)))))
-                4096)
-
-                ))
-  
+                (eval-exp ))
+   

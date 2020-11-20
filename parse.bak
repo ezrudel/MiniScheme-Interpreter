@@ -110,11 +110,11 @@
 
 ; lambda-exp data type
 (define (lambda-exp params body)
-  (list 'lam-exp params body))
+  (list 'lambda params body))
 
 (define (lambda-exp? exp)
   (if (list? exp)
-      (if (equal? 'lam-exp (first exp))
+      (if (equal? 'lambda (first exp))
           #t
           #f)
       #f))
@@ -153,11 +153,7 @@
                           (second input))
                      (parse (third input)))
                     (error 'parse "Invalid syntax ~s" input))]
-               [(eq? (first input) 'lambda)
-                (if (= (length input) 3)
-                    (lambda-exp (second input)
-                                (parse (third input)))
-                    (error 'parse "Invalid syntax ~s" input))]
+               [(eq? (first input) 'lambda
                [else (app-exp
                       (parse (first input))
                       (map parse (rest input)))])]
