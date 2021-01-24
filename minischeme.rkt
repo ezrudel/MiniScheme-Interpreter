@@ -1,5 +1,5 @@
 #lang racket
-; Ezra Rudel
+; This file was provided as starter code.
 
 (require "parse.rkt")
 (require "interp.rkt")

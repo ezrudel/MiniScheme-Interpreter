@@ -7,7 +7,7 @@
 (define all-tests
   (test-suite
    "All tests"
-   env-tests
+   env-tests ; 16 tests
    parse-tests
    interp-tests))
 
